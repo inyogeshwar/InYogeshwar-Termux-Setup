@@ -2,13 +2,13 @@
 
 **Android + Termux only.** A menu-driven setup helper for AI coding CLIs and a colorful terminal environment.
 
-> Status: v0.3.0 / experimental. This is not a promise that every desktop CLI supports Android.
+> Status: v0.3.1 / experimental. This is not a promise that every desktop CLI supports Android.
 
 ## Features
 
 - Install All Compatible Tools or choose tools individually
 - Essential Termux packages: Git, curl, wget, Node.js/npm, Python, editors and utilities
-- AI CLI install attempts with explicit Android compatibility warnings
+- AI CLI install attempts with explicit Android compatibility warnings; npm installs do not use `--force` and use bounded network retries
 - Update, repair/diagnostics and uninstall menu
 - Zsh + Powerlevel10k setup
 - Optional Android APK build setup: Java 17, Gradle, Android SDK Platform, native Termux build tools, Gradle wrapper and a non-destructive test APK
