@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 PROJECT_NAME="InYogeshwar Termux Setup"
-PROJECT_VERSION="0.3.1"
+PROJECT_VERSION="0.4.0"
 CONFIG_DIR="${HOME}/.config/inyogeshwar-termux-setup"
 LOG_DIR="${HOME}/.local/state/inyogeshwar-termux-setup"
 LOG_FILE="${LOG_DIR}/setup.log"
