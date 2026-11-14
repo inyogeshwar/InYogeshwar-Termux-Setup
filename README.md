@@ -30,7 +30,7 @@ This sequence upgrades Termux packages **before** downloading or installing proj
 If the project folder already exists, do not run the clone command again. Use:
 
 ```bash
-cd "$HOME/InYogeshwar-Termux-Setup" && git pull --ff-only && bash setup.sh
+cd "$HOME/InYogeshwar-Termux-Setup" && bash setup.sh
 ```
 
 From the menu, choose **1** for essential packages + compatible AI CLI installation attempts + Zsh theme. Choose **9** separately for the optional Android APK build toolchain. Experimental CLI and SDK steps retain their compatibility warnings and confirmations.
