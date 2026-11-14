@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1 — OpenCode installer output and prompt fixes
+- Remove npm `--force`; use normal package installation with bounded fetch retries and timeout.
+- Fix confirmation prompt color rendering by printing ANSI escape sequences correctly.
+- Bump displayed project version to 0.3.1.
+
 ## 0.3.0 — Safer Termux bootstrap and package recovery
 - Remove the curl executable from the bootstrap download path; Git fetches the repository.
 - Run `apt update` and `apt full-upgrade -y` before dependency installation.
