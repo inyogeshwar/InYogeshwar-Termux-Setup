@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.4.0 — Termux compatibility cleanup
+- Keep Gemini CLI as the only best-effort experimental AI CLI candidate; require `gemini --version` to pass after installation.
+- Remove OpenCode v2, Claude Code, Codex CLI and Antigravity from install and update flows based on observed Android/Termux incompatibilities.
+- Simplify custom install choices to Gemini CLI, Zsh theme and essential Termux packages.
+- Add diagnostics that distinguish a present Gemini command from a successful version/startup check.
+- Add uninstall options for legacy unsupported CLI packages left by earlier releases.
+- Update compatibility help and README with the exact errors observed on the device.
+- Bump displayed project version to 0.4.0.
+
 ## 0.3.1 — OpenCode installer output and prompt fixes
 - Remove npm `--force`; use normal package installation with bounded fetch retries and timeout.
 - Fix confirmation prompt color rendering by printing ANSI escape sequences correctly.
