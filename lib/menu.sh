@@ -2,6 +2,7 @@
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../modules/base.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../modules/ai-tools.sh"
 source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../modules/terminal.sh"
+source "$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../modules/android-build.sh"
 
 main_menu() {
   while true; do
@@ -16,6 +17,7 @@ main_menu() {
     printf '%b\n' "${CYAN}6)${RESET} Uninstall AI Tools"
     printf '%b\n' "${CYAN}7)${RESET} Colorful Zsh Theme"
     printf '%b\n' "${CYAN}8)${RESET} View Compatibility & Help"
+    printf '%b\n' "${CYAN}9)${RESET} Android APK Build Setup"
     printf '%b\n' "${CYAN}0)${RESET} Exit"
     line
     read -r -p "Select an option: " choice
@@ -28,6 +30,7 @@ main_menu() {
       6) uninstall_menu; pause ;;
       7) install_colorful_shell; pause ;;
       8) compatibility_help; pause ;;
+      9) android_build_menu ;;
       0) ok "Setup closed."; exit 0 ;;
       *) warn "Invalid option." ; sleep 1 ;;
     esac
@@ -117,5 +120,6 @@ compatibility_help() {
   printf '%b\n' "${YELLOW}Claude Code${RESET}: experimental; official OS list does not include Android/Termux."
   printf '%b\n' "${YELLOW}Codex CLI${RESET}: experimental; official native binaries target Linux/macOS/Windows, not Android/Bionic."
   printf '%b\n' "${RED}Antigravity CLI${RESET}: not installed on Termux; official Linux build requires glibc, while Termux uses Android Bionic."
+  printf '%b\n' "${YELLOW}Android APK toolchain${RESET}: experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages."
   printf '\nNever enter API keys into this installer. Authenticate inside each CLI using its own official flow.'
 }

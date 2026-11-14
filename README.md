@@ -2,7 +2,7 @@
 
 **Android + Termux only.** A menu-driven setup helper for AI coding CLIs and a colorful terminal environment.
 
-> Status: MVP / experimental. This is not a promise that every desktop CLI supports Android.
+> Status: MVP v0.2.0 / experimental. This is not a promise that every desktop CLI supports Android.
 
 ## Features
 
@@ -11,9 +11,11 @@
 - AI CLI install attempts with explicit Android compatibility warnings
 - Update, repair/diagnostics and uninstall menu
 - Zsh + Powerlevel10k setup
+- Optional Android APK build setup: Java 17, Gradle, Android SDK Platform, native Termux build tools, Gradle wrapper and a non-destructive test APK
 - Logs at `~/.local/state/inyogeshwar-termux-setup/setup.log`
 - Existing `.zshrc` is backed up before the setup block is appended
 - OpenCode's own TUI settings are not modified
+- Android APK build support is experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages. Shell configuration files are backed up before managed environment blocks are added.
 
 ## Quick start
 
@@ -50,6 +52,12 @@ The installer does not spoof the operating system, replace libc, or force deskto
 - The installer does not request Android storage permission automatically.
 - This project does not install Flutter or desktop IDEs.
 - OpenCode's dark TUI is left to OpenCode's own configuration.
+
+## Android APK build setup
+
+Open the main menu and select **9) Android APK Build Setup**. Install Java/Gradle/native tools first, then attempt SDK Platform + Build Tools installation. Generate a reusable Gradle wrapper with `addwrapper` inside a project. The optional test project is created at `~/inyogeshwar-android-build-test` and is never overwritten.
+
+The supplied Hunter Ai script was used as a feature reference, not copied verbatim: this project avoids deleting `~/hello-hunter`, does not replace `.zshrc`, and separates SDK setup from the optional APK build. SDK manager and APK build success still require validation on a real Termux/Android device.
 
 ## Official references
 

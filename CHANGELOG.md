@@ -8,3 +8,14 @@
 - Added explicit Antigravity Termux incompatibility guard
 - Added update, uninstall and diagnostics menus
 - Added Zsh + Powerlevel10k setup with `.zshrc` backup
+
+
+## 0.2.0 — Android build module
+- Add optional Android APK Build Setup menu and modular installer.
+- Add Java 17, Gradle, Android SDK Platform, native tool override, Gradle wrapper and test APK workflows.
+- Back up shell configuration before appending environment settings.
+- Refuse to overwrite the test project or an existing project Gradle wrapper.
+- Add Android build diagnostics and explicit experimental compatibility warnings.
+
+
+Implementation note: The Hunter Ai Termux Setup v3.0 script supplied for review was treated as a feature reference. Its destructive project deletion and full `.zshrc` replacement behavior were not carried over.
