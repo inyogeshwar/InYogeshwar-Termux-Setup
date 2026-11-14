@@ -2,12 +2,12 @@
 
 **Android + Termux only.** A menu-driven setup helper for AI coding CLIs and a colorful terminal environment.
 
-> Status: MVP v0.2.0 / experimental. This is not a promise that every desktop CLI supports Android.
+> Status: v0.3.0 / experimental. This is not a promise that every desktop CLI supports Android.
 
 ## Features
 
 - Install All Compatible Tools or choose tools individually
-- Essential Termux packages: Git, curl, Node.js/npm, Python, editors and utilities
+- Essential Termux packages: Git, curl, wget, Node.js/npm, Python, editors and utilities
 - AI CLI install attempts with explicit Android compatibility warnings
 - Update, repair/diagnostics and uninstall menu
 - Zsh + Powerlevel10k setup
@@ -15,21 +15,47 @@
 - Logs at `~/.local/state/inyogeshwar-termux-setup/setup.log`
 - Existing `.zshrc` is backed up before the setup block is appended
 - OpenCode's own TUI settings are not modified
-- Android APK build support is experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages. Shell configuration files are backed up before managed environment blocks are added.
+- Android APK build support is experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages.
 
-## Quick start (one command)
+## Quick start (one command, no curl bootstrap)
 
 Open Termux and run:
 
 ```bash
-pkg update -y && pkg install -y curl git && curl -fsSL https://raw.githubusercontent.com/inyogeshwar/InYogeshwar-Termux-Setup/main/setup.sh | bash
+apt update && apt full-upgrade -y && apt install -y git && git clone --depth 1 https://github.com/inyogeshwar/InYogeshwar-Termux-Setup.git "$HOME/InYogeshwar-Termux-Setup" && bash "$HOME/InYogeshwar-Termux-Setup/setup.sh"
 ```
 
-The bootstrap checks that it is running in Termux, clones the project into `~/InYogeshwar-Termux-Setup` or fast-forwards an existing clean clone, then launches the interactive setup menu. It does not overwrite a non-Git folder or discard local changes.
+This sequence upgrades Termux packages **before** downloading or installing project dependencies. It uses Git to fetch the repository; the bootstrap itself does not require the `curl` executable. The setup script repeats the package consistency upgrade as a safety check, then launches the interactive menu.
+
+If the project folder already exists, do not run the clone command again. Use:
+
+```bash
+cd "$HOME/InYogeshwar-Termux-Setup" && git pull --ff-only && bash setup.sh
+```
 
 From the menu, choose **1** for essential packages + compatible AI CLI installation attempts + Zsh theme. Choose **9** separately for the optional Android APK build toolchain. Experimental CLI and SDK steps retain their compatibility warnings and confirmations.
 
-Manual install is also supported: clone the repository, then run `bash install.sh`.
+## Package manager recovery
+
+If you see an error such as:
+
+```text
+CANNOT LINK EXECUTABLE "curl": cannot locate symbol "SSL_set_quic_tls_early_data_enabled"
+```
+
+it usually indicates a mixed or incomplete package/library upgrade. Do not delete Termux libraries manually and do not try to repair this by reinstalling only curl. Run:
+
+```bash
+apt update && apt full-upgrade -y
+```
+
+Close Termux completely, reopen it, then test:
+
+```bash
+curl --version
+```
+
+If `apt full-upgrade` itself fails, capture the complete output and resolve the repository/package-manager error before continuing. The installer stops when the full upgrade fails; it will not claim that the setup succeeded.
 
 ## Compatibility policy
 
@@ -54,9 +80,7 @@ The installer does not spoof the operating system, replace libc, or force deskto
 
 ## Android APK build setup
 
-Open the main menu and select **9) Android APK Build Setup**. Install Java/Gradle/native tools first, then attempt SDK Platform + Build Tools installation. Generate a reusable Gradle wrapper with `addwrapper` inside a project. The optional test project is created at `~/inyogeshwar-android-build-test` and is never overwritten.
-
-The supplied Hunter Ai script was used as a feature reference, not copied verbatim: this project avoids deleting `~/hello-hunter`, does not replace `.zshrc`, and separates SDK setup from the optional APK build. SDK manager and APK build success still require validation on a real Termux/Android device.
+Open the main menu and select **9) Android APK Build Setup**. Install Java/Gradle/native tools first, then attempt SDK Platform + Build Tools installation. Generate a reusable Gradle wrapper with `addwrapper` inside a project. The optional test project is created at `~/inyogeshwar-android-build-test` and is never overwritten. SDK manager and APK build success still require validation on a real Termux/Android device.
 
 ## Official references
 
