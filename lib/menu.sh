@@ -52,7 +52,9 @@ custom_install() {
   printf '%b\n' "1 OpenCode v2  2 Gemini CLI  3 Claude Code  4 Codex CLI"
   printf '%b\n' "5 Antigravity CLI  6 Colorful Zsh  7 Essential packages"
   read -r -p "Your selection: " selection
-  [[ " $selection " == *" 7 "* ]] && install_base
+  if [[ " $selection " == *" 7 "* ]]; then
+    install_base || { warn "Base package setup failed; custom CLI installation was stopped."; return 1; }
+  fi
   for item in $selection; do
     case "$item" in
       1) install_ai_tool opencode || true ;;
@@ -110,13 +112,20 @@ diagnostics() {
   printf 'Architecture: %s\n' "$(uname -m)"
   printf 'Shell: %s\n' "${SHELL:-unknown}"
   printf 'Storage available: '; df -h "$HOME" | awk 'NR==2 {print $4 " free"}'
-  for bin in pkg git curl node npm python zsh opencode gemini claude codex agy; do
+  for bin in pkg apt git curl node npm python zsh opencode gemini claude codex agy; do
     if command -v "$bin" >/dev/null 2>&1; then
       printf '%b %s: %s\n' "${GREEN}✔${RESET}" "$bin" "$(command -v "$bin")"
     else
       printf '%b %s: not found\n' "${GRAY}•${RESET}" "$bin"
     fi
   done
+  if command -v curl >/dev/null 2>&1; then
+    if curl --version >/dev/null 2>&1; then
+      ok "curl executable starts successfully."
+    else
+      warn "curl is installed but cannot start. Run: apt update && apt full-upgrade -y"
+    fi
+  fi
   printf '\nLog: %s\n' "$LOG_FILE"
 }
 
