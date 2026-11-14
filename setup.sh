@@ -5,18 +5,35 @@ REPO_URL="https://github.com/inyogeshwar/InYogeshwar-Termux-Setup.git"
 INSTALL_DIR="$HOME/InYogeshwar-Termux-Setup"
 BRANCH="main"
 
-if [[ -z "${PREFIX:-}" || "$PREFIX" != *com.termux* ]] || ! command -v pkg >/dev/null 2>&1; then
+if [[ -z "${PREFIX:-}" || "$PREFIX" != *com.termux* ]] || ! command -v apt >/dev/null 2>&1; then
   echo "Error: Run this installer inside Termux on Android." >&2
   exit 1
 fi
 
-echo "InYogeshwar Termux Setup — bootstrap"
+echo "InYogeshwar Termux Setup — safe bootstrap"
+echo "Step 1/4: Refreshing package indexes..."
+apt update || {
+  echo "Error: apt update failed. Check Termux repository and network." >&2
+  exit 1
+}
+
+echo "Step 2/4: Upgrading installed packages..."
+apt full-upgrade -y || {
+  echo "Error: apt full-upgrade failed. Setup has stopped before installing tools." >&2
+  echo "Fix the package manager state, then rerun this script." >&2
+  exit 1
+}
+
+echo "Step 3/4: Checking Git..."
 if ! command -v git >/dev/null 2>&1; then
-  pkg install -y git
+  apt install -y git || {
+    echo "Error: Could not install Git after package upgrade." >&2
+    exit 1
+  }
 fi
 
 if [[ -d "$INSTALL_DIR/.git" ]]; then
-  echo "Existing project found. Updating from GitHub..."
+  echo "Existing project found. Checking for local changes..."
   current_remote="$(git -C "$INSTALL_DIR" remote get-url origin 2>/dev/null || true)"
   if [[ "$current_remote" != "$REPO_URL" && "$current_remote" != "https://github.com/inyogeshwar/InYogeshwar-Termux-Setup" ]]; then
     echo "Error: $INSTALL_DIR exists but origin is not the expected repository." >&2
@@ -34,10 +51,9 @@ elif [[ -e "$INSTALL_DIR" ]]; then
   echo "Move or rename that folder yourself; installer will not overwrite it." >&2
   exit 1
 else
-  echo "Downloading project..."
+  echo "Downloading project with Git (curl is not required)..."
   git clone --depth 1 --branch "$BRANCH" "$REPO_URL" "$INSTALL_DIR"
 fi
 
-echo
-echo "Launching the interactive setup menu..."
+echo "Step 4/4: Launching setup menu..."
 exec bash "$INSTALL_DIR/install.sh"
