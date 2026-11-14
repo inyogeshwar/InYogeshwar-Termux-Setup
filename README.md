@@ -17,20 +17,19 @@
 - OpenCode's own TUI settings are not modified
 - Android APK build support is experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages. Shell configuration files are backed up before managed environment blocks are added.
 
-## Quick start
+## Quick start (one command)
 
-In Termux:
+Open Termux and run:
 
 ```bash
-pkg update -y
-pkg install -y git
-git clone https://github.com/inyogeshwar/InYogeshwar-Termux-Setup.git
-cd InYogeshwar-Termux-Setup
-chmod +x install.sh
-bash install.sh
+pkg update -y && pkg install -y curl git && curl -fsSL https://raw.githubusercontent.com/inyogeshwar/InYogeshwar-Termux-Setup/main/setup.sh | bash
 ```
 
-If the repository has not been created yet, download/extract this project ZIP and run `bash install.sh` from its folder.
+The bootstrap checks that it is running in Termux, clones the project into `~/InYogeshwar-Termux-Setup` or fast-forwards an existing clean clone, then launches the interactive setup menu. It does not overwrite a non-Git folder or discard local changes.
+
+From the menu, choose **1** for essential packages + compatible AI CLI installation attempts + Zsh theme. Choose **9** separately for the optional Android APK build toolchain. Experimental CLI and SDK steps retain their compatibility warnings and confirmations.
+
+Manual install is also supported: clone the repository, then run `bash install.sh`.
 
 ## Compatibility policy
 
