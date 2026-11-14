@@ -22,9 +22,17 @@ main_menu() {
     line
     read -r -p "Select an option: " choice
     case "$choice" in
-      1) install_base || warn "Base setup had errors; continuing with selected tools."; install_all_tools; install_colorful_shell || warn "Theme setup had errors."; pause ;;
+      1)
+        if install_base; then
+          install_all_tools
+          install_colorful_shell || warn "Theme setup had errors."
+        else
+          warn "Base package setup failed. AI tools were not installed."
+        fi
+        pause
+        ;;
       2) custom_install; pause ;;
-      3) install_base || warn "Base setup had errors."; pause ;;
+      3) install_base || warn "Base package setup failed. Review the error before retrying."; pause ;;
       4) update_tools; pause ;;
       5) diagnostics; pause ;;
       6) uninstall_menu; pause ;;
@@ -69,7 +77,7 @@ install_all_tools() {
 }
 
 update_tools() {
-  install_base
+  install_base || { warn "Package repair failed; tool updates were skipped."; return 1; }
   has_npm || { warn "npm is not installed."; return; }
   for item in "@google/gemini-cli" "@opencode/cli" "@anthropic-ai/claude-code" "@openai/codex"; do
     if npm list -g --depth=0 "$item" >/dev/null 2>&1; then
