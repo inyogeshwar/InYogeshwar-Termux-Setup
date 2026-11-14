@@ -29,7 +29,7 @@ install_ai_tool() {
   fi
 
   info "Installing ${label}..."
-  if npm install -g "$package" --force 2>&1 | tee -a "$LOG_FILE"; then
+  if npm install -g "$package" --no-fund --no-audit --progress=true --fetch-retries=2 --fetch-timeout=120000 2>&1 | tee -a "$LOG_FILE"; then
     if command -v "$command_name" >/dev/null 2>&1; then
       if "$command_name" --version 2>&1 | tee -a "$LOG_FILE"; then
         ok "${label} installed and command check passed."
