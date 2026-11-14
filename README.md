@@ -1,21 +1,21 @@
 # InYogeshwar-Termux-Setup
 
-**Android + Termux only.** A menu-driven setup helper for AI coding CLIs and a colorful terminal environment.
+**Android + Termux only.** A menu-driven helper for Termux essentials, one experimental AI CLI candidate, a colorful shell, and optional Android APK build tooling.
 
-> Status: v0.3.1 / experimental. This is not a promise that every desktop CLI supports Android.
+> Status: v0.4.0. No AI CLI in this project is officially supported on Android/Termux. Gemini CLI is retained only as a best-effort experimental candidate and must pass a local version check.
 
 ## Features
 
-- Install All Compatible Tools or choose tools individually
-- Essential Termux packages: Git, curl, wget, Node.js/npm, Python, editors and utilities
-- AI CLI install attempts with explicit Android compatibility warnings; npm installs do not use `--force` and use bounded network retries
-- Update, repair/diagnostics and uninstall menu
+- Install Termux essentials and optionally attempt Gemini CLI
+- Essential packages: Git, curl, wget, Node.js/npm, Python, editors and utilities
+- Gemini CLI install, update, uninstall and command/version verification
+- Legacy cleanup for previously attempted unsupported AI CLI packages
+- Repair / diagnostics, including a Gemini CLI startup check
 - Zsh + Powerlevel10k setup
 - Optional Android APK build setup: Java 17, Gradle, Android SDK Platform, native Termux build tools, Gradle wrapper and a non-destructive test APK
 - Logs at `~/.local/state/inyogeshwar-termux-setup/setup.log`
 - Existing `.zshrc` is backed up before the setup block is appended
-- OpenCode's own TUI settings are not modified
-- Android APK build support is experimental; SDK manager and Gradle builds may fail depending on device, architecture and Termux packages.
+- No OS spoofing, libc replacement, npm `--force`, or forced desktop-native binaries
 
 ## Quick start (one command, no curl bootstrap)
 
@@ -25,15 +25,29 @@ Open Termux and run:
 apt update && apt full-upgrade -y && apt install -y git && git clone --depth 1 https://github.com/inyogeshwar/InYogeshwar-Termux-Setup.git "$HOME/InYogeshwar-Termux-Setup" && bash "$HOME/InYogeshwar-Termux-Setup/setup.sh"
 ```
 
-This sequence upgrades Termux packages **before** downloading or installing project dependencies. It uses Git to fetch the repository; the bootstrap itself does not require the `curl` executable. The setup script repeats the package consistency upgrade as a safety check, then launches the interactive menu.
+This sequence upgrades Termux packages before downloading or installing project dependencies. It uses Git to fetch the repository; the bootstrap itself does not require the `curl` executable. The setup script repeats the package consistency upgrade as a safety check, then launches the interactive menu.
 
-If the project folder already exists, do not run the clone command again. Use:
+If the project folder already exists, use:
 
 ```bash
 cd "$HOME/InYogeshwar-Termux-Setup" && bash setup.sh
 ```
 
-From the menu, choose **1** for essential packages + compatible AI CLI installation attempts + Zsh theme. Choose **9** separately for the optional Android APK build toolchain. Experimental CLI and SDK steps retain their compatibility warnings and confirmations.
+Choose **1** for essential packages, the experimental Gemini CLI attempt, and the Zsh theme. Choose **9** separately for the optional Android APK build toolchain.
+
+## AI CLI compatibility policy
+
+| AI CLI | v0.4.0 behavior | Evidence from Termux logs |
+|---|---|---|
+| Gemini CLI | Retained as experimental candidate; install only counts as passed if `gemini --version` succeeds | npm installed the package and created the command, but optional `node-pty` and `@github/keytar` scripts were blocked. Full interactive/runtime behavior still needs testing |
+| OpenCode v2 | Removed from install/update menus | npm returned `EBADPLATFORM`: package allows darwin/linux/win32, current OS was android |
+| Claude Code | Removed from install/update menus | npm blocked `postinstall`; Claude reported that its native binary was missing |
+| Codex CLI | Removed from install/update menus | launcher reported missing `@openai/codex-linux-arm64` optional dependency |
+| Antigravity CLI | Removed from install menus | Official Linux build requires glibc; Termux uses Android Bionic |
+
+**Important:** Gemini CLI is not officially supported on Android/Termux either. It is retained only because its npm package produced a command in the supplied logs. A successful `gemini --version` check proves only that the CLI starts; sign-in, shell execution, terminal integration and other features must be tested separately. npm may warn that optional dependency scripts were blocked. The installer does not automatically allow arbitrary dependency scripts.
+
+The installer no longer attempts OpenCode, Claude Code, Codex CLI, or Antigravity. The uninstall menu includes a cleanup option for legacy packages from earlier releases.
 
 ## Package manager recovery
 
@@ -43,7 +57,7 @@ If you see an error such as:
 CANNOT LINK EXECUTABLE "curl": cannot locate symbol "SSL_set_quic_tls_early_data_enabled"
 ```
 
-it usually indicates a mixed or incomplete package/library upgrade. Do not delete Termux libraries manually and do not try to repair this by reinstalling only curl. Run:
+it usually indicates a mixed or incomplete package/library upgrade. Do not delete Termux libraries manually and do not repair this by reinstalling only curl. Run:
 
 ```bash
 apt update && apt full-upgrade -y
@@ -55,28 +69,7 @@ Close Termux completely, reopen it, then test:
 curl --version
 ```
 
-If `apt full-upgrade` itself fails, capture the complete output and resolve the repository/package-manager error before continuing. The installer stops when the full upgrade fails; it will not claim that the setup succeeded.
-
-## Compatibility policy
-
-| Tool | Installer behavior | Reason |
-|---|---|---|
-| Gemini CLI | Experimental npm install, asks first | Official OS list does not name Android/Termux |
-| OpenCode v2 | Experimental npm install, asks first, verifies command and rolls back on failure | Official npm platform gate and Android wrapper issues have been reported |
-| Claude Code | Experimental npm install, asks first | Official OS list does not name Android/Termux |
-| Codex CLI | Experimental npm install, asks first | Official native binary targets do not list Android/Bionic |
-| Antigravity CLI | Skipped | Official Linux build requires glibc; Termux uses Android Bionic |
-
-The installer does not spoof the operating system, replace libc, or force desktop binaries into Termux. Compatibility can change; check upstream documentation before changing these safeguards.
-
-## Important notes
-
-- Install All means: attempt all tools that the user explicitly accepts as experimental, and skip tools marked incompatible.
-- Some tools may require their own account, subscription, API key or authentication. This project does not provide credentials.
-- Never paste API keys into issue reports or setup logs.
-- The installer does not request Android storage permission automatically.
-- This project does not install Flutter or desktop IDEs.
-- OpenCode's dark TUI is left to OpenCode's own configuration.
+If `apt full-upgrade` itself fails, capture the complete output and resolve the repository/package-manager error before continuing. The installer stops when the full upgrade fails.
 
 ## Android APK build setup
 
@@ -84,12 +77,12 @@ Open the main menu and select **9) Android APK Build Setup**. Install Java/Gradl
 
 ## Official references
 
-- OpenCode v2 install: https://opencode.ai/docs/
+- Gemini CLI installation: https://geminicli.com/docs/get-started/installation/
+- OpenCode documentation: https://opencode.ai/docs/
 - OpenCode Android platform issue: https://github.com/anomalyco/opencode/issues/47612
-- Gemini CLI install: https://geminicli.com/docs/get-started/installation/
 - Claude Code setup: https://docs.anthropic.com/en/docs/claude-code/getting-started
-- Codex CLI: https://github.com/openai/codex
-- Antigravity CLI: https://antigravity.google/docs/cli/install
+- Codex CLI repository: https://github.com/openai/codex
+- Antigravity CLI installation: https://antigravity.google/docs/cli/install
 
 ## License
 
