@@ -1,6 +1,6 @@
 #!/data/data/com.termux/files/usr/bin/bash
 PROJECT_NAME="InYogeshwar Termux Setup"
-PROJECT_VERSION="0.3.0"
+PROJECT_VERSION="0.3.1"
 CONFIG_DIR="${HOME}/.config/inyogeshwar-termux-setup"
 LOG_DIR="${HOME}/.local/state/inyogeshwar-termux-setup"
 LOG_FILE="${LOG_DIR}/setup.log"
@@ -20,7 +20,8 @@ log() { printf '[%s] %s\n' "$(date '+%F %T')" "$*" >> "$LOG_FILE"; }
 pause() { printf '\n'; read -r -p "Press Enter to continue..." _; }
 confirm() {
   local answer
-  read -r -p "${YELLOW}${1} [y/N]: ${RESET}" answer
+  printf '%b' "${YELLOW}${1} [y/N]: ${RESET}"
+  read -r answer
   [[ "$answer" =~ ^([yY]|[yY][eE][sS])$ ]]
 }
 require_termux() {
